@@ -19,7 +19,7 @@ class BiLSTM_CRF(nn.Module):
         self.lstm      = nn.LSTM(
                 input_size    = embedding_dim,
                 hidden_size   = LSTM_hidden_size,
-                num_layers    = LSTM_num_layers
+                num_layers    = LSTM_num_layers,
                 bidirectional = True,
                 batch_first   = True
                 )
