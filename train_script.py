@@ -109,7 +109,7 @@ def train(training_config):
             optimizer.zero_grad()
 
 
-            loss = -model.get_log_likelihood(
+            loss = -model.module.get_log_likelihood(
                     batched_text  = b_text_tensor,
                     batched_label = b_label_tensor,
                     batched_mask  = b_mask_tensor,
@@ -142,7 +142,7 @@ def train(training_config):
 
             optimizer.zero_grad()
 
-            loss = -model.get_log_likelihood(
+            loss = -model.module.get_log_likelihood(
                     batched_text  = b_text_tensor,
                     batched_label = b_label_tensor,
                     batched_mask  = b_mask_tensor,
@@ -175,7 +175,7 @@ def train(training_config):
     save model and data
     '''
 
-    model = model.to('cpu')
+    model = model.to('cpu').module
     torch.save(model.state_dict(), training_config['model_path_dst'])
 
     #  save the loss of the steps
