@@ -26,6 +26,7 @@ def train(training_config):
             vocab_size       = training_config['vocab_size'],
             embedding_dim    = training_config['embedding_dim'],
             LSTM_hidden_size = training_config['LSTM_hidden_size'],
+            LSTM_num_layers  = training_config['LSTM_num_layers'],
             num_labels       = training_config['num_labels'],
             sequence_length  = training_config['sequence_length']
             )
@@ -161,6 +162,8 @@ def train(training_config):
             loss_sum_test += loss_scalar
             step_losses.append(loss_scalar)
 
+
+            #  get the accuracy
             b_predicts = model(
                     batched_text = b_text_tensor,
                     batched_mask = b_mask_tensor,
@@ -211,6 +214,7 @@ if __name__ == "__main__":
     parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=2979)
     parser.add_argument("--embedding_dim"    , type=int   , help="embedding dimmention"                              , default=512)
     parser.add_argument("--LSTM_hidden_size" , type=int   , help="hidden_size of the BiLSTM model"                   , default=256)
+    parser.add_argument("--LSTM_num_layers"  , type=int   , help="num_layers of the BiLSTM model"                    , default=256)
     parser.add_argument("--num_labels"       , type=int   , help="types of labels"                                   , default=6)
     parser.add_argument("--sequence_length"  , type=int   , help="sequence_length"                                   , default=128)
     parser.add_argument("--model_path_dst"   , type=str   , help="the directory to save model"                       , default='./saved_models/saved_dict.pth')

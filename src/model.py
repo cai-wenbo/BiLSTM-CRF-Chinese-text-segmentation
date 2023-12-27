@@ -12,13 +12,14 @@ BiLSTM followed by a Conditional random field for text segmentation
 Single layer used here
 '''
 class BiLSTM_CRF(nn.Module):
-    def __init__(self, vocab_size, embedding_dim, LSTM_hidden_size, num_labels, sequence_length):
+    def __init__(self, vocab_size, embedding_dim, LSTM_hidden_size, LSTM_num_layers, num_labels, sequence_length):
         super(BiLSTM_CRF, self).__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
         self.lstm      = nn.LSTM(
                 input_size    = embedding_dim,
                 hidden_size   = LSTM_hidden_size,
+                num_layers    = LSTM_num_layers
                 bidirectional = True,
                 batch_first   = True
                 )

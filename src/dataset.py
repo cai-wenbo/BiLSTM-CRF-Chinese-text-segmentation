@@ -153,7 +153,7 @@ class PKCorpus(Dataset):
         mask_list   = encoding['attention_mask']
 
         #  reassign the coding  of the tokens
-        text_list = shuffle_encoding(text_list, 'data/shuffle_dict.csv')
+        #  text_list = shuffle_encoding(text_list, 'data/shuffle_dict.csv')
 
 
         self.text_list   = text_list
