@@ -180,7 +180,7 @@ class PKCorpus(Dataset):
         text_tensor   = torch.tensor(text   , dtype = torch.long)
         label_tensor  = torch.tensor(label  , dtype = torch.long)
         mask_tensor   = torch.tensor(mask   , dtype = torch.bool)
-        length_tensor = torch.tensor(length , dtype = torch.long)
+        length_tensor = torch.tensor(length , dtype = torch.int64)
 
         
         return text_tensor, label_tensor, mask_tensor, length_tensor
