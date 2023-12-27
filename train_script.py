@@ -207,14 +207,14 @@ def train(training_config):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--num_of_epochs"    , type=int   , help="number of epochs"                                  , default=5)
+    parser.add_argument("--num_of_epochs"    , type=int   , help="number of epochs"                                  , default=30)
     parser.add_argument("--batch_size"       , type=int   , help="batch size"                                        , default=512)
     parser.add_argument("--learning_rate"    , type=float , help="learning rate"                                     , default=1e-3)
     parser.add_argument("--weight_decay"     , type=float , help="weight_decay"                                      , default=1e-4)
-    parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=2979)
+    parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=21128)
     parser.add_argument("--embedding_dim"    , type=int   , help="embedding dimmention"                              , default=512)
     parser.add_argument("--LSTM_hidden_size" , type=int   , help="hidden_size of the BiLSTM model"                   , default=256)
-    parser.add_argument("--LSTM_num_layers"  , type=int   , help="num_layers of the BiLSTM model"                    , default=256)
+    parser.add_argument("--LSTM_num_layers"  , type=int   , help="num_layers of the BiLSTM model"                    , default=1)
     parser.add_argument("--num_labels"       , type=int   , help="types of labels"                                   , default=6)
     parser.add_argument("--sequence_length"  , type=int   , help="sequence_length"                                   , default=128)
     parser.add_argument("--model_path_dst"   , type=str   , help="the directory to save model"                       , default='./saved_models/saved_dict.pth')
