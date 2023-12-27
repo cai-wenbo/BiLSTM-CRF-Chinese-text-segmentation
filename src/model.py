@@ -47,7 +47,7 @@ class BiLSTM_CRF(nn.Module):
         embedded_text = self.embedding(batched_text)
 
         #  LSTM_out shape = (batch_size, sequence_length, 2 * LSTM_hidden_size)
-        packed_text = pack_padded_sequence(embedded_text, lengths, batch_first=True, enforce_sorted=False)
+        packed_text = pack_padded_sequence(embedded_text, lengths = lengths.cup(), batch_first=True, enforce_sorted=False)
         packed_LSTM_out, _ = self.lstm(packed_text)
         LSTM_out, _ = pad_packed_sequence(packed_LSTM_out, batch_first=True, total_length=self.sequence_length)
 
@@ -69,7 +69,7 @@ class BiLSTM_CRF(nn.Module):
         embedded_text = self.embedding(batched_text)
 
         #  LSTM_out shape = (batch_size, sequence_length, 2 * LSTM_hidden_size)
-        packed_text = pack_padded_sequence(embedded_text, lengths, batch_first=True, enforce_sorted=False)
+        packed_text = pack_padded_sequence(embedded_text, lengths=lengths.cpu(), batch_first=True, enforce_sorted=False)
         packed_LSTM_out, _ = self.lstm(packed_text)
         LSTM_out, _ = pad_packed_sequence(packed_LSTM_out, batch_first=True, total_length=self.sequence_length)
 
