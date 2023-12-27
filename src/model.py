@@ -59,10 +59,15 @@ class BiLSTM_CRF(nn.Module):
         logits = self.fc(LSTM_out)
         probs = self.softmax(logits)
 
-        #  get the most likely tag sequence
-        predicts = self.crf.decode(probs, batched_mask)
 
-        predicts = [predict + [5] * (self.sequence_length - len(predict)) for predict in predicts]
+
+        #  get the most likely tag sequence
+        if batched_mask is not None:
+            predicts = self.crf.decode(probs, batched_mask)
+            predicts = [predict + [5] * (self.sequence_length - len(predict)) for predict in predicts]
+        else:
+            predicts = self.crf.decode(probs)
+
         
         predicts = torch.tensor(predicts, dtype = torch.long).to(self.device)
 
