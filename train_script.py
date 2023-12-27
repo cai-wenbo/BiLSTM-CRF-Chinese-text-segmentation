@@ -103,8 +103,10 @@ def train(training_config):
         
         #  train loop
         for i, batch in enumerate(dataloader_train):
-            batch = tuple(t.to(device) for t in batch)
             b_text_tensor, b_label_tensor, b_mask_tensor, b_length_tensor = batch
+            b_text_tensor = b_text_tensor.to(device)
+            b_label_tensor = b_label_tensor.to(device)
+            b_mask_tensor = b_mask_tensor.to(device)
 
             optimizer.zero_grad()
 
@@ -137,8 +139,11 @@ def train(training_config):
         model.eval() 
         #  test_loop
         for i, batch in enumerate(dataloader_test):
-            batch = tuple(t.to(device) for t in batch)
             b_text_tensor, b_label_tensor, b_mask_tensor, b_length_tensor = batch
+            b_text_tensor = b_text_tensor.to(device)
+            b_label_tensor = b_label_tensor.to(device)
+            b_mask_tensor = b_mask_tensor.to(device)
+
 
             optimizer.zero_grad()
 
