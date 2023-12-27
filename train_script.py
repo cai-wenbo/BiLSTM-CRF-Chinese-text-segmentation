@@ -101,6 +101,7 @@ def train(training_config):
         loss_sum_train = 0
         correct        = 0
         
+        model.train()
         #  train loop
         for i, batch in enumerate(dataloader_train):
             b_text_tensor, b_label_tensor, b_mask_tensor, b_length_tensor = batch
@@ -116,7 +117,7 @@ def train(training_config):
                     batched_label = b_label_tensor,
                     batched_mask  = b_mask_tensor,
                     lengths       = b_length_tensor
-                    )
+                    ).sum()
 
 
             loss.backward()
@@ -134,7 +135,8 @@ def train(training_config):
 
 
         loss_sum_test = 0
-        correct       = 0
+        err       = 0
+        tokens_num    = 0
 
         model.eval() 
         #  test_loop
@@ -152,7 +154,7 @@ def train(training_config):
                     batched_label = b_label_tensor,
                     batched_mask  = b_mask_tensor,
                     lengths       = b_length_tensor
-                    )
+                    ).sum()
 
 
             loss_scalar = loss.item()
@@ -164,13 +166,15 @@ def train(training_config):
                     batched_mask = b_mask_tensor,
                     lengths      = b_length_tensor
                     )
-            correct += (b_predicts == b_label_tensor).sum().item()
-
+            err += (b_predicts != b_label_tensor).sum().item()
+            tokens_num += b_length_tensor.sum().item()
+            
+        
 
 
         test_loss = loss_sum_test / len(dataloader_test)
         test_losses.append(test_loss)
-        test_acc = correct / len(dataloader_test.dataset)
+        test_acc = 1 - err / tokens_num
 
 
         print(f'Epoch: {epoch+1} \n Train Loss: {train_loss:.6f}, train Test Loss: {test_loss:.6f}, Test Accuracy: {test_acc:.6f}')
@@ -201,12 +205,12 @@ def train(training_config):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_of_epochs"    , type=int   , help="number of epochs"                                  , default=5)
-    parser.add_argument("--batch_size"       , type=int   , help="batch size"                                        , default=2)
-    parser.add_argument("--learning_rate"    , type=float , help="learning rate"                                     , default=1e-5)
-    parser.add_argument("--weight_decay"     , type=float , help="weight_decay"                                      , default=1e-3)
+    parser.add_argument("--batch_size"       , type=int   , help="batch size"                                        , default=512)
+    parser.add_argument("--learning_rate"    , type=float , help="learning rate"                                     , default=1e-3)
+    parser.add_argument("--weight_decay"     , type=float , help="weight_decay"                                      , default=1e-4)
     parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=2979)
-    parser.add_argument("--embedding_dim"    , type=int   , help="embedding dimmention"                              , default=32)
-    parser.add_argument("--LSTM_hidden_size" , type=int   , help="hidden_size of the BiLSTM model"                   , default=16)
+    parser.add_argument("--embedding_dim"    , type=int   , help="embedding dimmention"                              , default=512)
+    parser.add_argument("--LSTM_hidden_size" , type=int   , help="hidden_size of the BiLSTM model"                   , default=256)
     parser.add_argument("--num_labels"       , type=int   , help="types of labels"                                   , default=6)
     parser.add_argument("--sequence_length"  , type=int   , help="sequence_length"                                   , default=128)
     parser.add_argument("--model_path_dst"   , type=str   , help="the directory to save model"                       , default='./saved_models/saved_dict.pth')

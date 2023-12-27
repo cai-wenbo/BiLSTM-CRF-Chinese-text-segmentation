@@ -14,6 +14,7 @@ Single layer used here
 class BiLSTM_CRF(nn.Module):
     def __init__(self, vocab_size, embedding_dim, LSTM_hidden_size, num_labels, sequence_length):
         super(BiLSTM_CRF, self).__init__()
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
         self.lstm      = nn.LSTM(
                 input_size    = embedding_dim,
@@ -58,6 +59,10 @@ class BiLSTM_CRF(nn.Module):
         #  get the most likely tag sequence
         predicts = self.crf.decode(probs, batched_mask)
 
+        predicts = [predict + [5] * (self.sequence_length - len(predict)) for predict in predicts]
+        
+        predicts = torch.tensor(predicts, dtype = torch.long).to(self.device)
+
         return predicts
 
 
@@ -79,6 +84,6 @@ class BiLSTM_CRF(nn.Module):
 
 
         #  scores shape = (batch_size, sequence_length, vocab_size + 2)
-        batched_log_likelihood = self.crf(probs, batched_label, batched_mask, reduction = 'sum')
+        batched_log_likelihood = self.crf(probs, batched_label, batched_mask, reduction = 'none')
 
         return batched_log_likelihood
