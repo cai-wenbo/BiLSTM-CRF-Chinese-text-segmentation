@@ -6,8 +6,11 @@ import os
 import argparse
 
 
+def insert_char(string, char, loc):
+    return string[:loc] + char + string[loc:]
 
-def segment_text(model_parameter):
+
+def segment_text(test_config):
     model_name = "bert-base-chinese"
     text_coder = TextCoder(model_name)
 
@@ -34,11 +37,15 @@ def segment_text(model_parameter):
     while True:
         src = input("enter the src word:\n")
         text_tensor = text_coder(src).unsqueeze(0)
-        print(text_tensor.shape)
         b_predicts = model(
                 batched_text = text_tensor
-                )
-        print(b_predicts)
+                ).tolist()
+        for i in range(len(b_predicts)):
+            loc = len(b_predicts) - i
+            if (b_predicts[loc] == 0) or (b_predicts[loc] == 1) or (b_predicts[loc] == 4):
+                src = insert_char(src, '|', loc)
+        print(src)
+                                                
 
 
 
