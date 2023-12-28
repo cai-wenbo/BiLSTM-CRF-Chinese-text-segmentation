@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from src.model import BiLSTM_CRF
 from src.utils import TextCoder
+from transformers import BertTokenizer
 import os
 import argparse
 
@@ -32,10 +33,12 @@ def segment_text(test_config):
         model_dict = torch.load(test_config['model_path_src'])
         model.load_state_dict(model_dict)
 
+    tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
 
 
     while True:
         src = input("enter the src word:\n")
+        text_list = tokenizer.tokenize(src)
         text_tensor = text_coder(src).unsqueeze(0)
         s_predicts = model(
                 batched_text = text_tensor
@@ -43,8 +46,8 @@ def segment_text(test_config):
         for i in range(len(s_predicts)):
             loc = len(s_predicts) - i - 1
             if (s_predicts[loc] == 0) or (s_predicts[loc] == 1) or (s_predicts[loc] == 4):
-                src = insert_char(src, '|', loc)
-        print(src)
+                text_list = insert_char(text_list, ['|'], loc)
+        print(''.join(text_list))
                                                 
 
 
