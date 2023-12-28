@@ -8,10 +8,7 @@ import argparse
 
 
 def segment_text(model_parameter):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
-
-
-    model_name = "bert_base_Chinese"
+    model_name = "bert-base-chinese"
     text_coder = TextCoder(model_name)
 
 
@@ -32,26 +29,26 @@ def segment_text(model_parameter):
         model_dict = torch.load(test_config['model_path_src'])
         model.load_state_dict(model_dict)
 
-    model = model.to(device)
 
 
     while True:
         src = input("enter the src word:\n")
-        text_tensor = text_coder(src)
+        text_tensor = text_coder(src).unsqueeze(0)
+        print(text_tensor.shape)
         b_predicts = model(
                 batched_text = text_tensor
                 )
-        print(b_predicts.shape)
+        print(b_predicts)
 
 
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=2979)
+    parser.add_argument("--vocab_size"       , type=int   , help="vocab size"                                        , default=21128)
     parser.add_argument("--embedding_dim"    , type=int   , help="embedding dimmention"                              , default=512)
     parser.add_argument("--LSTM_hidden_size" , type=int   , help="hidden_size of the BiLSTM model"                   , default=256)
-    parser.add_argument("--LSTM_num_layers"  , type=int   , help="num_layers of the BiLSTM model"                    , default=256)
+    parser.add_argument("--LSTM_num_layers"  , type=int   , help="num_layers of the BiLSTM model"                    , default=1)
     parser.add_argument("--num_labels"       , type=int   , help="types of labels"                                   , default=6)
     parser.add_argument("--sequence_length"  , type=int   , help="sequence_length"                                   , default=128)
     parser.add_argument("--model_path_src"   , type=str   , help="the directory to load model"                       , default='./saved_models/saved_dict.pth')
