@@ -8,15 +8,14 @@ from transformers import BertTokenizer
 input: a string
 output: a list to feed to model
 '''
-def TextCoder():
-    def __init__(self, model_name):
-        self.tokenizer = BertTokenizer.from_pretrained(model_name)
+class TextCoder():
+    def __init__(self, model_used):
+        self.tokenizer = BertTokenizer.from_pretrained(model_used)
 
 
     def __call__(self, input_text):
         encoding = self.tokenizer(input_text, add_special_tokens=False)
 
-        text_tensor  = torch.tensor(encoding  , dtype = torch.long)
+        text_tensor  = torch.tensor(encoding['input_ids']  , dtype = torch.long)
 
-        print(text_tensor.shape)
         return text_tensor
