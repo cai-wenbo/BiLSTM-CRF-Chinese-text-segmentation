@@ -37,12 +37,12 @@ def segment_text(test_config):
     while True:
         src = input("enter the src word:\n")
         text_tensor = text_coder(src).unsqueeze(0)
-        b_predicts = model(
+        s_predicts = model(
                 batched_text = text_tensor
-                ).tolist()
-        for i in range(len(b_predicts)):
-            loc = len(b_predicts) - i
-            if (b_predicts[loc] == 0) or (b_predicts[loc] == 1) or (b_predicts[loc] == 4):
+                ).squeeze(0).tolist()
+        for i in range(len(s_predicts)):
+            loc = len(s_predicts) - i - 1
+            if (s_predicts[loc] == 0) or (s_predicts[loc] == 1) or (s_predicts[loc] == 4):
                 src = insert_char(src, '|', loc)
         print(src)
                                                 
